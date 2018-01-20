@@ -1,0 +1,48 @@
+{
+  "name": "ts-do",
+  "version": "0.0.1",
+  "description": "Do like notation for typescript using fp-ts",
+  "main": "index.js",
+  "scripts": {
+    "build": "rm -rf dist/ && tsc -d -p tsconfig.dist.json",
+    "builddev": "rm -rf dist/ && tsc -d -p tsconfig.json",
+    "lint": "tslint src/**/*.ts test/**/*.ts",
+    "prepublish": "npm run build",
+    "pretest": "npm run lint",
+    "test": "jest --testPathPattern=.+\\.spec\\.ts",
+    "test:watch": "npm test -- --watch"
+  },
+  "keywords": [
+    "functional",
+    "do",
+    "notation",
+    "fp-ts",
+    "let",
+    "for"
+  ],
+  "author": "Vítor Castro",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jest": ">=22.0.1",
+    "@types/jest-matchers": ">=20.0.1",
+    "@types/ramda": "types/npm-ramda#dist",
+    "fp-ts": ">=0.6.8",
+    "jest": ">=22.1.4",
+    "jest-matchers": ">=20.0.3",
+    "ramda": ">=0.25.0",
+    "ts-jest": ">=22.0.1",
+    "ts-node": ">=4.1.0",
+    "typescript": ">=2.6.2"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(tsx?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "js",
+      "json"
+    ]
+  }
+}

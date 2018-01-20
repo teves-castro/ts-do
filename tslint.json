@@ -1,0 +1,17 @@
+{
+  "extends": [
+    "tslint:recommended"
+  ],
+  "rules": {
+    "arrow-parens": [false],
+    "no-console": [false],
+    "no-default-export": true,
+    "no-empty-interface": false,
+    "no-unused-variable": [true, {"ignore-pattern": "0"}],
+    "semicolon": [true, "never"],
+    "triple-equals": [true, "allow-undefined-check"],
+    "max-classes-per-file": [false],
+    "interface-name": [false],
+    "callable-types": [false]
+  }
+}
