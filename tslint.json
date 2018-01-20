@@ -12,6 +12,7 @@
     "triple-equals": [true, "allow-undefined-check"],
     "max-classes-per-file": [false],
     "interface-name": [false],
-    "callable-types": [false]
+    "callable-types": [false],
+    "only-arrow-functions": [false]
   }
 }
