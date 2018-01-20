@@ -30,11 +30,13 @@
   },
   "author": "Vítor Castro",
   "license": "MIT",
+  "dependencies": {
+    "fp-ts": ">=0.6.8"
+  },
   "devDependencies": {
     "@types/jest": ">=22.0.1",
     "@types/jest-matchers": ">=20.0.1",
     "@types/ramda": "types/npm-ramda#dist",
-    "fp-ts": ">=0.6.8",
     "jest": ">=22.1.4",
     "jest-matchers": ">=20.0.3",
     "ramda": ">=0.25.0",
