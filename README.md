@@ -21,7 +21,7 @@ import "ts-do"
 After just use the new methods on the existing types:
 
 ```
-import { some } from "ft-ts/lib/Option"
+import { some } from "fp-ts/lib/Option"
 
 const result = some({})
     .let("x", some(3))
