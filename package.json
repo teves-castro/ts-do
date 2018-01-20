@@ -1,8 +1,9 @@
 {
   "name": "ts-do",
   "version": "0.0.1",
-  "description": "Do like notation for typescript using fp-ts",
-  "main": "index.js",
+  "description": "Do like notation for typescript and fp-ts",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.js",
   "scripts": {
     "build": "rm -rf dist/ && tsc -d -p tsconfig.dist.json",
     "builddev": "rm -rf dist/ && tsc -d -p tsconfig.json",
@@ -20,6 +21,13 @@
     "let",
     "for"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/teves-castro/ts-do.git"
+  },
+  "bugs": {
+    "url": "https://github.com/teves-castro/ts-do/issues"
+  },
   "author": "Vítor Castro",
   "license": "MIT",
   "devDependencies": {
@@ -31,7 +39,7 @@
     "jest-matchers": ">=20.0.3",
     "ramda": ">=0.25.0",
     "ts-jest": ">=22.0.1",
-    "ts-lint": "^4.5.1",
+    "ts-lint": ">=4.5.1",
     "ts-node": ">=4.1.0",
     "typescript": ">=2.6.2"
   },
