@@ -58,7 +58,7 @@ yarn run build
 
 # Disclaimer
 
-This kind of operations (do notation) should be done with compiler support, like the special case of async/await for promises, that is included in most major languages these days.
+These kind of operations (do notation) should be done with compiler support, like the special case of async/await for promises, that is included in most major languages these days.
 
 Although these languages are adopting more and more functional programming constructs, saddly more advanced concepts are left out due to not having critical mass to demand it's implementation.
 
