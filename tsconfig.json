@@ -1,49 +1,44 @@
 {
-    "awesomeTypescriptLoaderOptions": {
-      "useBabel": false,
-      "useCache": true
-    },
-    "buildOnSave": false,
-    "compileOnSave": true,
-    "compilerOptions": {
-      "declaration": false,
-      "emitDecoratorMetadata": true,
-      "experimentalDecorators": true,
-      "isolatedModules": false,
-      "lib": [ "es2016.array.include", "es6", "scripthost", "dom" ],
-      "module": "commonjs",
-      "moduleResolution": "node",
-      "noImplicitAny": true,
-      "noImplicitReturns": true,
-      "noImplicitUseStrict": false,
-      "noLib": false,
-      "noUnusedLocals": true,
-      "outDir": "./temp/",
-      "preserveConstEnums": true,
-      "removeComments": true,
-      "skipLibCheck": true,
-      "skipDefaultLibCheck": true,
-      "strictNullChecks": true,
-      "stripInternal": true,
-      "suppressImplicitAnyIndexErrors": true,
-      "sourceMap": true,
-      "target": "es6"
-    },
-    "exclude": [
-      "node_modules"
-    ],
-    "include": [
-      "./src/**/*.ts",
-      "./test/**/*.ts"
-    ],
-    "jest": {
-      "globals": {
-        "ts-jest": {
-          "skipBabel": true
-        }
+  "awesomeTypescriptLoaderOptions": {
+    "useBabel": false,
+    "useCache": true
+  },
+  "buildOnSave": false,
+  "compileOnSave": true,
+  "compilerOptions": {
+    "declaration": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "isolatedModules": false,
+    "lib": ["es2016.array.include", "es6", "scripthost", "dom"],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitUseStrict": false,
+    "noLib": false,
+    "noUnusedLocals": true,
+    "outDir": "./temp/",
+    "preserveConstEnums": true,
+    "removeComments": true,
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "strictNullChecks": true,
+    "stripInternal": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "sourceMap": true,
+    "target": "es5"
+  },
+  "exclude": ["node_modules"],
+  "include": ["./src/**/*.ts", "./test/**/*.ts"],
+  "jest": {
+    "globals": {
+      "ts-jest": {
+        "skipBabel": true
       }
-    },
-    "atom": {
-      "rewriteTsconfig": false
     }
+  },
+  "atom": {
+    "rewriteTsconfig": false
   }
+}
