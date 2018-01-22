@@ -65,4 +65,4 @@ Although these languages are adopting more and more functional programming const
 So, this is an experiment on what can be accomplished without that compiler support. Meaning that if/when this is supported nativelly by the language itself, certainly with different syntax, this will become obsolete.
 
 Also I make no commitment to evolve the library beyond my own needs, so bear these warnings in mind when using the library.
-And of course I appreciate any comments and sujestions on how to improve or on how I completely blundered something.
+And of course I appreciate any comments and suggestions on how to improve or on how I completely blundered something.
