@@ -60,9 +60,9 @@ yarn run build
 
 These kind of operations (do notation) should be done with compiler support, like the special case of async/await for promises, that is included in most major languages these days.
 
-Although these languages are adopting more and more functional programming constructs, saddly more advanced concepts are left out due to not having critical mass to demand it's implementation.
+Although these languages are adopting more and more functional programming constructs, sadly more advanced concepts are left out due to not having critical mass to demand it's implementation.
 
-So, this is an experiment on what can be accomplished without that compiler support. Meaning that if/when this is supported nativelly by the language itself, certainly with different syntax, this will become obsolete.
+So, this is an experiment on what can be accomplished without that compiler support. Meaning that if/when this is supported natively by the language itself, certainly with different syntax, this will become obsolete.
 
 Also I make no commitment to evolve the library beyond my own needs, so bear these warnings in mind when using the library.
 And of course I appreciate any comments and suggestions on how to improve or on how I completely blundered something.
