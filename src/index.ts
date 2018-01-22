@@ -16,17 +16,17 @@ import { sequence, Traversable } from "fp-ts/lib/Traversable"
 
 function makeLet<M extends HKT2S>(
   M: Monad<M>,
-): <L, RA, RB>(
-  name: string,
+): <N extends string, L, RA, RB>(
+  name: N,
   other: HKT2As<M, L, RB> | ((a: RA) => HKT2As<M, L, RB>),
-) => HKT2As<M, L, RA & { [K in string]: RB }>
+) => HKT2As<M, L, RA & { [K in N]: RB }>
 
 function makeLet<M extends HKTS>(
   M: Monad<M>,
-): <A, B>(name: string, other: HKTAs<M, B> | ((a: A) => HKTAs<M, B>)) => HKTAs<M, A & { [K in string]: B }>
+): <N extends string, A, B>(name: N, other: HKTAs<M, B> | ((a: A) => HKTAs<M, B>)) => HKTAs<M, A & { [K in N]: B }>
 
 function makeLet(M: Monad<any>) {
-  return function<A, B>(name: string, other: HKTAs<any, B> | ((a: A) => HKTAs<any, B>)) {
+  return function<N extends string, A, B>(name: N, other: HKTAs<any, B> | ((a: A) => HKTAs<any, B>)) {
     return this.chain((previous: any) =>
       (typeof other === "function" ? other(previous) : other).map((state: any) => ({ ...previous, [name]: state })),
     )
@@ -36,24 +36,25 @@ function makeLet(M: Monad<any>) {
 function makeFor<T extends HKTS, M extends HKT2S>(
   M: Monad<M>,
   T: Traversable<T>,
-): <L, RA, RB>(
-  name: string,
+): <N extends string, L, RA, RB>(
+  name: N,
   others: HKTAs<T, HKT2As<M, L, RB>> | ((a: RA) => HKTAs<T, HKT2As<M, L, RB>>),
-) => HKT2As<M, L, RA & { [K in string]: HKTAs<T, RB> }>
+) => HKT2As<M, L, RA & { [K in N]: HKTAs<T, RB> }>
 
 function makeFor<T extends HKTS, M extends HKTS>(
   M: Monad<M>,
   T: Traversable<T>,
-): <A, B>(
-  name: string,
+): <N extends string, A, B>(
+  name: N,
   other: HKTAs<T, HKTAs<M, B>> | ((a: A) => HKTAs<T, HKTAs<M, B>>),
-) => HKTAs<M, A & { [K in string]: HKTAs<T, B> }>
+) => HKTAs<M, A & { [K in N]: HKTAs<T, B> }>
 
-function makeFor<T extends HKTS>(M: Monad<any>, T: Traversable<T>) {
-  return function(name: string, others: HKTAs<T, any> | ((a: any) => HKTAs<T, any>)) {
+function makeFor<M extends HKTS, T extends HKTS>(M: Monad<any>, T: Traversable<T>) {
+  const seq = sequence(M, T)
+  return function<N extends string, A, B>(name: N, others: HKTAs<T, HKTAs<M, B>> | ((a: A) => HKTAs<T, HKTAs<M, B>>)) {
     return this.chain((previous: any) => {
       const os = typeof others === "function" ? others(previous) : others
-      return sequence(M, T)(os).map((values: any) => ({ ...previous, [name]: values }))
+      return seq(os).map((values: HKTAs<T, B>) => ({ ...previous, [name]: values }))
     })
   }
 }
@@ -90,19 +91,19 @@ Some.prototype.return = Some.prototype.map
 
 declare module "fp-ts/lib/Either" {
   interface Left<L, A> {
-    let<B>(name: string, other: Either<L, B> | ((a: A) => Either<L, B>)): Either<L, A & { [K in string]: B }>
-    for<B>(
-      name: string,
+    let<N extends string, B>(name: N, other: Either<L, B> | ((a: A) => Either<L, B>)): Either<L, A & { [K in N]: B }>
+    for<N extends string, B>(
+      name: N,
       others: ReadonlyArray<Either<L, B>> | ((a: A) => ReadonlyArray<Either<L, B>>),
-    ): Either<L, A & { [K in string]: ReadonlyArray<B> }>
+    ): Either<L, A & { [K in N]: ReadonlyArray<B> }>
     return<B>(f: (a: A) => B): Either<L, B>
   }
   interface Right<L, A> {
-    let<B>(name: string, other: Either<L, B> | ((a: A) => Either<L, B>)): Either<L, A & { [K in string]: B }>
-    for<B>(
-      name: string,
+    let<N extends string, B>(name: N, other: Either<L, B> | ((a: A) => Either<L, B>)): Either<L, A & { [K in N]: B }>
+    for<N extends string, B>(
+      name: N,
       others: ReadonlyArray<Either<L, B>> | ((a: A) => ReadonlyArray<Either<L, B>>),
-    ): Either<L, A & { [K in string]: ReadonlyArray<B> }>
+    ): Either<L, A & { [K in N]: ReadonlyArray<B> }>
     return<B>(f: (a: A) => B): Either<L, B>
   }
 }
@@ -119,11 +120,11 @@ Right.prototype.return = Right.prototype.map
 
 declare module "fp-ts/lib/Task" {
   interface Task<A> {
-    let<B>(name: string, other: Task<B> | ((a: A) => Task<B>)): Task<A & { [K in string]: B }>
-    for<B>(
-      name: string,
+    let<N extends string, B>(name: N, other: Task<B> | ((a: A) => Task<B>)): Task<A & { [K in N]: B }>
+    for<N extends string, B>(
+      name: N,
       others: ReadonlyArray<Task<B>> | ((a: A) => ReadonlyArray<Task<B>>),
-    ): Task<A & { [K in string]: ReadonlyArray<B> }>
+    ): Task<A & { [K in N]: ReadonlyArray<B> }>
     return<B>(f: (a: A) => B): Task<B>
   }
 }
@@ -133,14 +134,14 @@ Task.prototype.return = Task.prototype.map
 
 declare module "fp-ts/lib/TaskEither" {
   interface TaskEither<L, A> {
-    let<B>(
-      name: string,
+    let<N extends string, B>(
+      name: N,
       other: TaskEither<L, B> | ((a: A) => TaskEither<L, B>),
-    ): TaskEither<L, A & { [K in string]: B }>
-    for<B>(
-      name: string,
+    ): TaskEither<L, A & { [K in N]: B }>
+    for<N extends string, B>(
+      name: N,
       others: ReadonlyArray<TaskEither<L, B>> | ((a: A) => ReadonlyArray<TaskEither<L, B>>),
-    ): TaskEither<L, A & { [K in string]: ReadonlyArray<B> }>
+    ): TaskEither<L, A & { [K in N]: ReadonlyArray<B> }>
     return<B>(f: (a: A) => B): TaskEither<L, B>
   }
 }
