@@ -14,18 +14,18 @@ import { TaskEither } from "fp-ts/lib/TaskEither"
 import * as taskEither from "fp-ts/lib/TaskEither"
 import { sequence, Traversable } from "fp-ts/lib/Traversable"
 
-function makeLet<M extends HKT2S>(
+export function makeLet<M extends HKT2S>(
   M: Monad<M>,
 ): <N extends string, L, RA, RB>(
   name: N,
   other: HKT2As<M, L, RB> | ((a: RA) => HKT2As<M, L, RB>),
 ) => HKT2As<M, L, RA & { [K in N]: RB }>
 
-function makeLet<M extends HKTS>(
+export function makeLet<M extends HKTS>(
   M: Monad<M>,
 ): <N extends string, A, B>(name: N, other: HKTAs<M, B> | ((a: A) => HKTAs<M, B>)) => HKTAs<M, A & { [K in N]: B }>
 
-function makeLet(M: Monad<any>) {
+export function makeLet(M: Monad<any>) {
   return function<N extends string, A, B>(name: N, other: HKTAs<any, B> | ((a: A) => HKTAs<any, B>)) {
     return this.chain((previous: any) =>
       (typeof other === "function" ? other(previous) : other).map((state: any) => ({ ...previous, [name]: state })),
@@ -33,7 +33,7 @@ function makeLet(M: Monad<any>) {
   }
 }
 
-function makeFor<T extends HKTS, M extends HKT2S>(
+export function makeFor<T extends HKTS, M extends HKT2S>(
   M: Monad<M>,
   T: Traversable<T>,
 ): <N extends string, L, RA, RB>(
@@ -41,7 +41,7 @@ function makeFor<T extends HKTS, M extends HKT2S>(
   others: HKTAs<T, HKT2As<M, L, RB>> | ((a: RA) => HKTAs<T, HKT2As<M, L, RB>>),
 ) => HKT2As<M, L, RA & { [K in N]: HKTAs<T, RB> }>
 
-function makeFor<T extends HKTS, M extends HKTS>(
+export function makeFor<T extends HKTS, M extends HKTS>(
   M: Monad<M>,
   T: Traversable<T>,
 ): <N extends string, A, B>(
@@ -49,7 +49,7 @@ function makeFor<T extends HKTS, M extends HKTS>(
   other: HKTAs<T, HKTAs<M, B>> | ((a: A) => HKTAs<T, HKTAs<M, B>>),
 ) => HKTAs<M, A & { [K in N]: HKTAs<T, B> }>
 
-function makeFor<M extends HKTS, T extends HKTS>(M: Monad<any>, T: Traversable<T>) {
+export function makeFor<M extends HKTS, T extends HKTS>(M: Monad<any>, T: Traversable<T>) {
   const seq = sequence(M, T)
   return function<N extends string, A, B>(name: N, others: HKTAs<T, HKTAs<M, B>> | ((a: A) => HKTAs<T, HKTAs<M, B>>)) {
     return this.chain((previous: any) => {
