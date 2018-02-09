@@ -920,7 +920,7 @@ form-data@~2.3.1:
 
 fp-ts@^1.0.0-rc:
   version "1.0.0-rc"
-  resolved "https://mmrepo.jfrog.io/mmrepo/api/npm/npm-virtual/fp-ts/-/fp-ts-1.0.0-rc.tgz#78eb49bc95518a54d0d070002f22eaff6021325f"
+  resolved "https://registry.yarnpkg.com/fp-ts/-/fp-ts-1.0.0-rc.tgz#78eb49bc95518a54d0d070002f22eaff6021325f"
 
 fs-extra@4.0.3:
   version "4.0.3"
