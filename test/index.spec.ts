@@ -51,7 +51,7 @@ describe("Let/Return", () => {
     it("short circuits computations", () => {
       const result = some({})
         .let("x", some(10))
-        .let("y", none)
+        .do(none)
         .return(throwUnexpectedCall)
 
       expect(result).toEqual(none)
@@ -89,7 +89,7 @@ describe("Let/Return", () => {
     it("short circuits scoped computations", () => {
       const result = right({})
         .let("x", right(10))
-        .let("y", left("some error"))
+        .do(() => left("some error"))
         .return(throwUnexpectedCall)
 
       expect(result).toEqual(left("some error"))
@@ -160,8 +160,8 @@ describe("Let/Return", () => {
     it("short circuits scoped computations when using value", async () => {
       const result = success({})
         .let("x", success(3))
-        .let("_", failure("some error"))
-        .let("y", success("2"))
+        .do(failure("some error"))
+        .do(throwUnexpectedCall)
         .return(() => throwUnexpectedCall)
 
       await result.fold(message => expect(message).toBe("some error"), throwUnexpectedCall).run()
@@ -170,8 +170,8 @@ describe("Let/Return", () => {
     it("short circuits scoped computations when using function", async () => {
       const result = success({})
         .let("x", success(3))
-        .let("_", _ => failure("some error"))
-        .let("y", success("2"))
+        .do(failure("some error"))
+        .do(throwUnexpectedCall)
         .return(() => throwUnexpectedCall)
 
       await result.fold(message => expect(message).toBe("some error"), throwUnexpectedCall).run()

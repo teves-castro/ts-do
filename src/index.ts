@@ -14,6 +14,20 @@ import { TaskEither } from "fp-ts/lib/TaskEither"
 import * as taskEither from "fp-ts/lib/TaskEither"
 import { sequence, Traversable } from "fp-ts/lib/Traversable"
 
+export function makeDo<M extends HKT2S>(
+  M: Monad<M>,
+): <L, RA>(other: HKT2As<M, L, void> | ((a: RA) => HKT2As<M, L, void>)) => HKT2As<M, L, RA>
+
+export function makeDo<M extends HKTS>(
+  M: Monad<M>,
+): <A>(other: HKTAs<M, void> | ((a: A) => HKTAs<M, void>)) => HKTAs<M, A>
+
+export function makeDo(M: Monad<any>) {
+  return function<A>(other: HKTAs<any, void> | ((a: A) => HKTAs<any, void>)) {
+    return this.chain((previous: A) => (typeof other === "function" ? other(previous) : other).map(() => previous))
+  }
+}
+
 export function makeLet<M extends HKT2S>(
   M: Monad<M>,
 ): <N extends string, L, RA, RB>(
@@ -62,6 +76,7 @@ export function makeFor<M extends HKTS, T extends HKTS>(M: Monad<any>, T: Traver
 // tslint:disable:no-shadowed-variable
 declare module "fp-ts/lib/Option" {
   interface None<A> {
+    do(other: Option<void> | ((a: A) => Option<void>)): Option<A>
     let<N extends string, B>(name: N, other: Option<B> | ((a: A) => Option<B>)): Option<A & { [K in N]: B }>
     for<N extends string, B>(
       name: N,
@@ -70,6 +85,7 @@ declare module "fp-ts/lib/Option" {
     return<B>(f: (a: A) => B): Option<B>
   }
   interface Some<A> {
+    do(other: Option<void> | ((a: A) => Option<void>)): Option<A>
     let<N extends string, B>(name: N, other: Option<B> | ((a: A) => Option<B>)): Option<A & { [K in N]: B }>
     for<N extends string, B>(
       name: N,
@@ -78,12 +94,16 @@ declare module "fp-ts/lib/Option" {
     return<B>(f: (a: A) => B): Option<B>
   }
 }
+None.prototype.do = function() {
+  return this
+}
 None.prototype.let = function() {
   return this
 }
 None.prototype.for = function() {
   return this
 }
+Some.prototype.do = makeDo(option)
 Some.prototype.let = makeLet(option)
 Some.prototype.for = makeFor(option, array)
 None.prototype.return = None.prototype.map
@@ -91,6 +111,7 @@ Some.prototype.return = Some.prototype.map
 
 declare module "fp-ts/lib/Either" {
   interface Left<L, A> {
+    do(other: Either<L, void> | ((a: A) => Either<L, void>)): Either<L, A>
     let<N extends string, B>(name: N, other: Either<L, B> | ((a: A) => Either<L, B>)): Either<L, A & { [K in N]: B }>
     for<N extends string, B>(
       name: N,
@@ -99,6 +120,7 @@ declare module "fp-ts/lib/Either" {
     return<B>(f: (a: A) => B): Either<L, B>
   }
   interface Right<L, A> {
+    do(other: Either<L, void> | ((a: A) => Either<L, void>)): Either<L, A>
     let<N extends string, B>(name: N, other: Either<L, B> | ((a: A) => Either<L, B>)): Either<L, A & { [K in N]: B }>
     for<N extends string, B>(
       name: N,
@@ -107,12 +129,16 @@ declare module "fp-ts/lib/Either" {
     return<B>(f: (a: A) => B): Either<L, B>
   }
 }
+Left.prototype.do = function() {
+  return this
+}
 Left.prototype.let = function() {
   return this
 }
 Left.prototype.for = function() {
   return this
 }
+Right.prototype.do = makeDo(either)
 Right.prototype.let = makeLet(either)
 Right.prototype.for = makeFor(either, array)
 Left.prototype.return = Left.prototype.map
@@ -120,6 +146,7 @@ Right.prototype.return = Right.prototype.map
 
 declare module "fp-ts/lib/Task" {
   interface Task<A> {
+    do(other: Task<void> | ((a: A) => Task<void>)): Task<A>
     let<N extends string, B>(name: N, other: Task<B> | ((a: A) => Task<B>)): Task<A & { [K in N]: B }>
     for<N extends string, B>(
       name: N,
@@ -128,12 +155,14 @@ declare module "fp-ts/lib/Task" {
     return<B>(f: (a: A) => B): Task<B>
   }
 }
+Task.prototype.do = makeDo(task)
 Task.prototype.let = makeLet(task)
 Task.prototype.for = makeFor(task, array)
 Task.prototype.return = Task.prototype.map
 
 declare module "fp-ts/lib/TaskEither" {
   interface TaskEither<L, A> {
+    do(other: TaskEither<L, void> | ((a: A) => TaskEither<L, void>)): TaskEither<L, A>
     let<N extends string, B>(
       name: N,
       other: TaskEither<L, B> | ((a: A) => TaskEither<L, B>),
@@ -145,6 +174,7 @@ declare module "fp-ts/lib/TaskEither" {
     return<B>(f: (a: A) => B): TaskEither<L, B>
   }
 }
+TaskEither.prototype.do = makeDo(taskEither)
 TaskEither.prototype.let = makeLet(taskEither)
 TaskEither.prototype.for = makeFor(taskEither, array)
 TaskEither.prototype.return = TaskEither.prototype.map
