@@ -1,0 +1,23 @@
+import { array } from "fp-ts/lib/Array"
+import { taskEither, TaskEither } from "fp-ts/lib/TaskEither"
+import { makeDo, makeLet, makeFor } from "./builders"
+
+
+declare module "fp-ts/lib/TaskEither" {
+  interface TaskEither<L, A> {
+    do(other: TaskEither<L, void> | ((a: A) => TaskEither<L, void>)): TaskEither<L, A>
+    let<N extends string, B>(
+      name: N,
+      other: TaskEither<L, B> | ((a: A) => TaskEither<L, B>),
+    ): TaskEither<L, A & { [K in N]: B }>
+    for<N extends string, B>(
+      name: N,
+      others: ReadonlyArray<TaskEither<L, B>> | ((a: A) => ReadonlyArray<TaskEither<L, B>>),
+    ): TaskEither<L, A & { [K in N]: ReadonlyArray<B> }>
+    return<B>(f: (a: A) => B): TaskEither<L, B>
+  }
+}
+TaskEither.prototype.do = makeDo(taskEither)
+TaskEither.prototype.let = makeLet(taskEither)
+TaskEither.prototype.for = makeFor(taskEither, array)
+TaskEither.prototype.return = TaskEither.prototype.map

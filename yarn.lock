@@ -918,9 +918,9 @@ form-data@~2.3.1:
     combined-stream "^1.0.5"
     mime-types "^2.1.12"
 
-fp-ts@>=0.6.8:
-  version "0.6.8"
-  resolved "https://registry.yarnpkg.com/fp-ts/-/fp-ts-0.6.8.tgz#3b4ac3251f3565b2aefceffd787eb06c30c04b52"
+fp-ts@^1.0.0-rc:
+  version "1.0.0-rc"
+  resolved "https://mmrepo.jfrog.io/mmrepo/api/npm/npm-virtual/fp-ts/-/fp-ts-1.0.0-rc.tgz#78eb49bc95518a54d0d070002f22eaff6021325f"
 
 fs-extra@4.0.3:
   version "4.0.3"

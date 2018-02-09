@@ -10,8 +10,18 @@ const throwUnexpectedCall = () => {
   throw new Error("Unexpected call")
 }
 
-describe("Let/Return", () => {
+describe("Do/Let/Return", () => {
   describe("for option", () => {
+    it("chains scoped computations which perform effects", () => {
+      const result = some({})
+        .let("x", some(23))
+        .do(() => some(undefined))
+        .let("y", some(23))
+        .return(({ x, y }) => x - y)
+
+      expect(result).toEqual(some(0))
+    })
+
     it("chains scoped computations", () => {
       const result = some({})
         .let("x", some(23))
@@ -56,9 +66,28 @@ describe("Let/Return", () => {
 
       expect(result).toEqual(none)
     })
+
+    it("short circuits computations with effects", () => {
+      const result = some({})
+        .let("x", some(10))
+        .do(none)
+        .return(throwUnexpectedCall)
+
+      expect(result).toEqual(none)
+    })
   })
 
   describe("for either", () => {
+    it("chains scoped computations which perform effects", () => {
+      const result = right({})
+        .let("x", right<string, number>(10))
+        .do(() => right<string, void>(undefined))
+        .let("y", () => right<string, number>(5))
+        .return(({ x, y }) => x - y)
+
+      expect(result).toEqual(right(5))
+    })
+
     it("chains scoped computations", () => {
       const result = right({})
         .let("x", right<string, number>(10))
@@ -94,12 +123,22 @@ describe("Let/Return", () => {
 
       expect(result).toEqual(left("some error"))
     })
+
+    it("short circuits scoped computations with effects", () => {
+      const result = right({})
+        .let("x", right(10))
+        .do(() => left("some error"))
+        .do(throwUnexpectedCall)
+        .return(throwUnexpectedCall)
+
+      expect(result).toEqual(left("some error"))
+    })
   })
 
   describe("for task", () => {
-    const delayValue = (d: number, v: number) =>
+    const delayValue = <T>(d: number, v: T) =>
       new Task(() => {
-        const p = new Promise<number>(resolve => {
+        const p = new Promise<T>(resolve => {
           setTimeout(() => {
             resolve(v)
           }, d)
@@ -107,14 +146,24 @@ describe("Let/Return", () => {
         return p
       })
 
-    it("chains scoped computations", async () => {
-      const result = new Task(() => Promise.resolve({}))
-        .let("x", delayValue(100, 23))
-        .let("y", delayValue(200, 10))
-        .return(({ x, y }) => x - y)
+      it("chains scoped computations", async () => {
+        const result = new Task(() => Promise.resolve({}))
+          .let("x", delayValue(100, 23))
+          .let("y", delayValue(200, 10))
+          .return(({ x, y }) => x - y)
 
-      expect(await result.run()).toEqual(13)
-    })
+        expect(await result.run()).toEqual(13)
+      })
+
+      it("chains scoped computations with effects", async () => {
+        const result = new Task(() => Promise.resolve({}))
+          .let("x", delayValue(100, 23))
+          .do(() => delayValue(100, undefined))
+          .let("y", delayValue(200, 10))
+          .return(({ x, y }) => x - y)
+
+        expect(await result.run()).toEqual(13)
+      })
 
     it("chains multiple scoped computations", async () => {
       const result = new Task(() => Promise.resolve({}))
@@ -148,6 +197,16 @@ describe("Let/Return", () => {
       await result.fold(throwUnexpectedCall, r => expect(r).toEqual("33")).run()
     })
 
+    it("chains scoped computations with effects", async () => {
+      const result = success({})
+        .let("x", success(10))
+        .do(() => success(undefined))
+        .let("y", success(5))
+        .return(({ x, y }) => x - y)
+
+      await result.fold(throwUnexpectedCall, r => expect(r).toEqual(5)).run()
+    })
+
     it("chains multiple scoped computations", async () => {
       const result = success({})
         .let("x", success(23))
@@ -170,7 +229,17 @@ describe("Let/Return", () => {
     it("short circuits scoped computations when using function", async () => {
       const result = success({})
         .let("x", success(3))
-        .let("_", _ => failure("some error"))
+        .do(() => failure("some error"))
+        .let("y", success("2"))
+        .return(() => throwUnexpectedCall)
+
+      await result.fold(message => expect(message).toBe("some error"), throwUnexpectedCall).run()
+    })
+
+    it("short circuits scoped computations with effects", async () => {
+      const result = success({})
+        .let("x", success(3))
+        .do(() => failure("some error"))
         .let("y", success("2"))
         .return(() => throwUnexpectedCall)
 
