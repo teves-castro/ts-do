@@ -1,6 +1,6 @@
 import { array } from "fp-ts/lib/Array"
 import { either, Left, Right } from "fp-ts/lib/Either"
-import { makeFor, makeLet, makeDo } from "./builders"
+import { makeDo, makeFor, makeLet } from "./builders"
 
 declare module "fp-ts/lib/Either" {
   interface Left<L, A> {

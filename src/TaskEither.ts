@@ -1,6 +1,6 @@
 import { array } from "fp-ts/lib/Array"
 import { taskEither, TaskEither } from "fp-ts/lib/TaskEither"
-import { makeDo, makeLet, makeFor } from "./builders"
+import { makeDo, makeFor, makeLet } from "./builders"
 
 declare module "fp-ts/lib/TaskEither" {
   interface TaskEither<L, A> {

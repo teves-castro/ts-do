@@ -1,6 +1,6 @@
 import { array } from "fp-ts/lib/Array"
 import { task, Task } from "fp-ts/lib/Task"
-import { makeFor, makeLet, makeDo } from "./builders"
+import { makeDo, makeFor, makeLet } from "./builders"
 
 declare module "fp-ts/lib/Task" {
   interface Task<A> {

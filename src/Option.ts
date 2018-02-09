@@ -1,6 +1,6 @@
 import { array } from "fp-ts/lib/Array"
-import { option, None, Some } from "fp-ts/lib/Option"
-import { makeDo, makeLet, makeFor } from "./builders"
+import { None, option, Some } from "fp-ts/lib/Option"
+import { makeDo, makeFor, makeLet } from "./builders"
 
 // tslint:disable:no-shadowed-variable
 declare module "fp-ts/lib/Option" {

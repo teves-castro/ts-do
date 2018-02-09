@@ -1,7 +1,8 @@
+// tslint:disable:no-shadowed-variable
 // npm i gcanti/fp-ts#next
 
-import { Task, task, getMonoid } from "fp-ts/lib/Task"
 import { Monoid, monoidVoid } from "fp-ts/lib/Monoid"
+import { getMonoid, Task, task } from "fp-ts/lib/Task"
 import { createInterface } from "readline"
 import "./index"
 
@@ -80,8 +81,8 @@ export const program3 = runWizard(M.concat(prompt("name"), prompt("age")))
 
 // program3.run()
 
-import { foldMap } from "fp-ts/lib/Foldable"
 import { array } from "fp-ts/lib/Array"
+import { foldMap } from "fp-ts/lib/Foldable"
 
 export const program4 = runWizard(foldMap(array, M)(["name", "age", "favorite color", "sign"], prompt))
 
