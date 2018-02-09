@@ -5,6 +5,7 @@ import { makeFor, makeLet, makeDo } from "./builders"
 declare module "fp-ts/lib/Either" {
   interface Left<L, A> {
     do(other: Either<L, void> | ((a: A) => Either<L, void>)): Either<L, A>
+    into<N extends string>(name: N): Either<L, { [K in N]: A }>
     let<N extends string, B>(name: N, other: Either<L, B> | ((a: A) => Either<L, B>)): Either<L, A & { [K in N]: B }>
     for<N extends string, B>(
       name: N,
@@ -14,6 +15,7 @@ declare module "fp-ts/lib/Either" {
   }
   interface Right<L, A> {
     do(other: Either<L, void> | ((a: A) => Either<L, void>)): Either<L, A>
+    into<N extends string>(name: N): Either<L, { [K in N]: A }>
     let<N extends string, B>(name: N, other: Either<L, B> | ((a: A) => Either<L, B>)): Either<L, A & { [K in N]: B }>
     for<N extends string, B>(
       name: N,
@@ -25,6 +27,9 @@ declare module "fp-ts/lib/Either" {
 Left.prototype.do = function() {
   return this
 }
+Left.prototype.into = function() {
+  return this
+}
 Left.prototype.let = function() {
   return this
 }
@@ -32,6 +37,7 @@ Left.prototype.for = function() {
   return this
 }
 Right.prototype.do = makeDo(either)
+Right.prototype.into = makeLet(either)
 Right.prototype.let = makeLet(either)
 Right.prototype.for = makeFor(either, array)
 Left.prototype.return = Left.prototype.map

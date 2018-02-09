@@ -5,7 +5,7 @@ import { HKT } from "fp-ts/lib/HKT"
 
 export function makeDo<M extends URIS2>(
   M: Monad<M>,
-): <L, RA>(other: Type2<M, L, void> | ((a: RA) => Type2<M, L, void>)) => Type2<M, L, RA>
+): <L, R>(other: Type2<M, L, void> | ((a: R) => Type2<M, L, void>)) => Type2<M, L, R>
 
 export function makeDo<M extends URIS>(M: Monad<M>): <A>(other: Type<M, void> | ((a: A) => Type<M, void>)) => Type<M, A>
 
@@ -17,6 +17,10 @@ export function makeDo<M extends URIS>(M: Monad<M>) {
     )
   }
 }
+
+export function makeLet<M extends URIS2>(M: Monad<M>): <N extends string, L, R>(name: N) => Type2<M, L, { [K in N]: R }>
+
+export function makeLet<M extends URIS>(M: Monad<M>): <N extends string, A>(name: N) => Type<M, { [K in N]: A }>
 
 export function makeLet<M extends URIS2>(
   M: Monad<M>,
@@ -32,11 +36,15 @@ export function makeLet<M extends URIS>(
 export function makeLet<M extends URIS>(M: Monad<M>) {
   return function<N extends string, A, B>(name: N, other: Type<M, B> | ((a: A) => Type<M, B>)) {
     const self = this as HKT<M, A>
-    return M.chain(self, previous =>
-      M.map((typeof other === "function" ? other(previous) : other) as HKT<any, B>, value =>
-        Object.assign({}, previous, { [name]: value }),
-      ),
-    )
+    if (other) {
+      return M.chain(self, previous =>
+        M.map((typeof other === "function" ? other(previous) : other) as HKT<any, B>, value =>
+          Object.assign({}, previous, { [name]: value }),
+        ),
+      )
+    } else {
+      return M.map(self, previous => ({ [name]: previous }))
+    }
   }
 }
 

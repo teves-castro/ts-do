@@ -37,7 +37,7 @@ export const putStrLn = (message: string): Task<void> =>
 
 export const programDo = putStrLn("What is your name?")
   .let("name", getLine)
-  .do(() => putStrLn("What is your age?"))
+  .do(putStrLn("What is your age?"))
   .let("age", getLine)
   .do(({ name }) => putStrLn(`Your name is ${name}`))
   .do(({ age }) => putStrLn(`Your age is ${age}`))

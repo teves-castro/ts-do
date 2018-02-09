@@ -6,6 +6,7 @@ import { makeDo, makeLet, makeFor } from "./builders"
 declare module "fp-ts/lib/Option" {
   interface None<A> {
     do(other: Option<void> | ((a: A) => Option<void>)): Option<A>
+    into<N extends string>(name: N): Option<A & { [K in N]: A }>
     let<N extends string, B>(name: N, other: Option<B> | ((a: A) => Option<B>)): Option<A & { [K in N]: B }>
     for<N extends string, B>(
       name: N,
@@ -15,6 +16,7 @@ declare module "fp-ts/lib/Option" {
   }
   interface Some<A> {
     do(other: Option<void> | ((a: A) => Option<void>)): Option<A>
+    into<N extends string>(name: N): Option<A & { [K in N]: A }>
     let<N extends string, B>(name: N, other: Option<B> | ((a: A) => Option<B>)): Option<A & { [K in N]: B }>
     for<N extends string, B>(
       name: N,
@@ -26,6 +28,9 @@ declare module "fp-ts/lib/Option" {
 None.prototype.do = function() {
   return this
 }
+None.prototype.into = function() {
+  return this
+}
 None.prototype.let = function() {
   return this
 }
@@ -33,6 +38,7 @@ None.prototype.for = function() {
   return this
 }
 Some.prototype.do = makeDo(option)
+Some.prototype.into = makeLet(option)
 Some.prototype.let = makeLet(option)
 Some.prototype.for = makeFor(option, array)
 None.prototype.return = None.prototype.map

@@ -5,6 +5,7 @@ import { makeFor, makeLet, makeDo } from "./builders"
 declare module "fp-ts/lib/Task" {
   interface Task<A> {
     do(other: Task<void> | ((a: A) => Task<void>)): Task<A>
+    into<N extends string>(name: N): Task<{ [K in N]: A }>
     let<N extends string, B>(name: N, other: Task<B> | ((a: A) => Task<B>)): Task<A & { [K in N]: B }>
     for<N extends string, B>(
       name: N,
@@ -14,6 +15,7 @@ declare module "fp-ts/lib/Task" {
   }
 }
 Task.prototype.do = makeDo(task)
+Task.prototype.into = makeLet(task)
 Task.prototype.let = makeLet(task)
 Task.prototype.for = makeFor(task, array)
 Task.prototype.return = Task.prototype.map
