@@ -1,6 +1,6 @@
 # Description
 
-This library works as an extension for [fp-ts](https://github.com/gcanti/fp-ts) allowing the usage of a haskell like do notation. One can use .do, .let and .for to chain computations on any of the supplied monads.
+This library works as an extension for [fp-ts](https://github.com/gcanti/fp-ts) allowing the usage of a haskell like do notation. One can use .do, .let, .for and .into to chain computations on any of the supplied monads.
 Each .let or .for in the computation chain contributes to a threaded context that is available to each subsequent step. A .do method can also be used to perform computations that add nothing to the context.
 It is also possible (and relatively easy) to use the builders to add support for other monads.
 
@@ -21,9 +21,9 @@ import { some } from "fp-ts/lib/Option"
 import { range, sum } from "ramda"
 import "ts-do"
 
-const result = some({})
-    .let("x", some(3))                                      // Chains the computation. Adds { x: 3 } to the context
-    .do(() => some(undefined))                              // Chains the computation. Adds nothing to the context
+const result = some(3)
+    .into("x")                                              // Chains the computation. Creates a context with { x: 3 }
+    .do(some(undefined))                                    // Chains the computation. Adds nothing to the context
     .for("ys", ({ x }) => range(0, x).map(() => some(1)))   // Sequences computations. Adds { ys: [1, 1, 1] } to the context
     .return(({ x, ys }) => x - sum(ys))
 
