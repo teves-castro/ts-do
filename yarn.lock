@@ -922,9 +922,9 @@ form-data@~2.3.1:
     combined-stream "^1.0.5"
     mime-types "^2.1.12"
 
-fp-ts@^1.0.0-rc:
-  version "1.0.0-rc"
-  resolved "https://registry.yarnpkg.com/fp-ts/-/fp-ts-1.0.0-rc.tgz#78eb49bc95518a54d0d070002f22eaff6021325f"
+fp-ts@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/fp-ts/-/fp-ts-1.0.0.tgz#129d24a3bf9f2426125b12e5c997514abe847fe7"
 
 fs-extra@4.0.3:
   version "4.0.3"
