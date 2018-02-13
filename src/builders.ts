@@ -1,5 +1,4 @@
-import { Type, Type2, URIS, URIS2 } from "fp-ts/lib/HKT"
-import { HKT } from "fp-ts/lib/HKT"
+import { HKT, Type, Type2, URIS, URIS2 } from "fp-ts/lib/HKT"
 import { Monad } from "fp-ts/lib/Monad"
 import { sequence, Traversable } from "fp-ts/lib/Traversable"
 
