@@ -1,18 +1,9 @@
 {
-  "extends": [
-    "tslint:recommended"
-  ],
+  "extends": "tslint-config-standard",
   "rules": {
-    "arrow-parens": [false],
-    "no-console": [false],
-    "no-default-export": true,
-    "no-empty-interface": false,
-    "no-unused-variable": [true, {"ignore-pattern": "0"}],
-    "semicolon": [true, "never"],
-    "triple-equals": [true, "allow-undefined-check"],
-    "max-classes-per-file": [false],
-    "interface-name": [false],
-    "callable-types": [false],
-    "only-arrow-functions": [false]
+    "space-before-function-paren": false,
+    "no-use-before-declare": false,
+    "variable-name": false,
+    "ter-indent": false
   }
 }
