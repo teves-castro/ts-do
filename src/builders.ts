@@ -40,11 +40,11 @@ export function makeLet<M extends URIS2>(M: Monad<M>): Into2<M>
 export function makeLet<M extends URIS>(M: Monad<M>): Let<M>
 export function makeLet<M extends URIS2>(M: Monad<M>): Let2<M>
 export function makeLet<M extends URIS>(M: Monad<M>) {
-  return function<N extends string, A, B>(name: N, other: Step<M, A, B>) {
-    const self = this as HKT<M, A>
+  return function<N extends string>(name: N, other: any) {
+    const self = this
     if (other) {
       return M.chain(self, previous =>
-        M.map((typeof other === "function" ? other(previous) : other) as HKT<any, B>, value =>
+        M.map(typeof other === "function" ? other(previous) : other, value =>
           Object.assign({}, previous, { [name]: value }),
         ),
       )
@@ -63,14 +63,14 @@ export type For2<T extends URIS, M extends URIS2> = <N extends string, L, RA, RB
   others: Steps2<T, M, L, RA, RB>,
 ) => Context2<M, N, L, RA, Type<T, RB>>
 
-export function makeFor<T extends URIS, M extends URIS2>(M: Monad<M>, T: Traversable<T>): For2<T, M>
 export function makeFor<T extends URIS, M extends URIS>(M: Monad<M>, T: Traversable<T>): For<T, M>
+export function makeFor<T extends URIS, M extends URIS2>(M: Monad<M>, T: Traversable<T>): For2<T, M>
 export function makeFor<M extends URIS, T extends URIS>(M: Monad<M>, T: Traversable<T>) {
   const seq = sequence(M, T)
-  return function<N extends string, A, B>(name: N, others: Type<T, Type<M, B>> | ((a: A) => Type<T, Type<M, B>>)) {
-    const self = this as HKT<M, A>
+  return function<N extends string>(name: N, others: any) {
+    const self = this
     return M.chain(self, previous => {
-      const os: HKT<any, HKT<any, B>> = typeof others === "function" ? others(previous) : others
+      const os = typeof others === "function" ? others(previous) : others
       return M.map(seq(os), values => Object.assign({}, previous, { [name]: values }))
     })
   }

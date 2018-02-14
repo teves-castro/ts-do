@@ -5,14 +5,7 @@ import "../src/index"
 describe("Do/Let/Return", () => {
   describe("for task", () => {
     const delayValue = <T>(d: number, v: T) =>
-      new Task(() => {
-        const p = new Promise<T>(resolve => {
-          setTimeout(() => {
-            resolve(v)
-          }, d)
-        })
-        return p
-      })
+      new Task(() => new Promise<T>(resolve => setTimeout(() => resolve(v), d)))
 
     it("chains scoped computations", async () => {
       const result = delayValue(100, 23)
