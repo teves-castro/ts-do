@@ -19,3 +19,5 @@ Task.prototype.into = makeLet(task)
 Task.prototype.let = makeLet(task)
 Task.prototype.for = makeFor(task, array)
 Task.prototype.return = Task.prototype.map
+
+export const taskModule = "task"

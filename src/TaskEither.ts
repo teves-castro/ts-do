@@ -22,3 +22,5 @@ TaskEither.prototype.into = makeLet(taskEither)
 TaskEither.prototype.let = makeLet(taskEither)
 TaskEither.prototype.for = makeFor(taskEither, array)
 TaskEither.prototype.return = TaskEither.prototype.map
+
+export const taskEitherModule = "taskEither"

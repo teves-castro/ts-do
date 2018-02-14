@@ -42,3 +42,5 @@ Right.prototype.let = makeLet(either)
 Right.prototype.for = makeFor(either, array)
 Left.prototype.return = Left.prototype.map
 Right.prototype.return = Right.prototype.map
+
+export const eitherModule = "either"

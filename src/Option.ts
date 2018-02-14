@@ -43,3 +43,5 @@ Some.prototype.let = makeLet(option)
 Some.prototype.for = makeFor(option, array)
 None.prototype.return = None.prototype.map
 Some.prototype.return = Some.prototype.map
+
+export const optionModule = "option"
