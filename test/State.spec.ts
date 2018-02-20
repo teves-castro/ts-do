@@ -1,3 +1,4 @@
+import { constant } from "fp-ts/lib/function"
 import { state } from "fp-ts/lib/State"
 import { get, modify, put } from "fp-ts/lib/State"
 import "../src/State"
@@ -15,7 +16,14 @@ describe("Do/Let/Return", () => {
         .do(put(42))
         .let("z", get<number>())
 
-      expect(result.run(1)).toEqual([{ x: "Hello", y: 2, z: 42 }, 42])
+      const expected = state
+        .of("Hello")
+        .chain(x => modify(inc).map(constant({ x })))
+        .chain(ctx => get().map(y => ({ ...ctx, y })))
+        .chain(ctx => put(42).map(constant(ctx)))
+        .chain(ctx => get().map(z => ({ ...ctx, z })))
+
+      expect(result.run(1)).toEqual(expected.run(1))
     })
   })
 })
