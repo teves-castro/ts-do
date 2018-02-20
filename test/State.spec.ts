@@ -17,11 +17,11 @@ describe("Do/Let/Return", () => {
         .let("z", get<number>())
 
       const expected = state
-        .of("Hello")
+        .of<number, string>("Hello")
         .chain(x => modify(inc).map(constant({ x })))
-        .chain(ctx => get().map(y => ({ ...ctx, y })))
+        .chain(ctx => get<number>().map(y => ({ ...ctx, y })))
         .chain(ctx => put(42).map(constant(ctx)))
-        .chain(ctx => get().map(z => ({ ...ctx, z })))
+        .chain(ctx => get<number>().map(z => ({ ...ctx, z })))
 
       expect(result.run(1)).toEqual(expected.run(1))
     })
