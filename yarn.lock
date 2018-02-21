@@ -922,9 +922,9 @@ form-data@~2.3.1:
     combined-stream "1.0.6"
     mime-types "^2.1.12"
 
-fp-ts@^1.0.0:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/fp-ts/-/fp-ts-1.0.1.tgz#4d0fc9ab24c6c6cd0381e5eefc684a6eb8321b41"
+fp-ts@^1.0.1, fp-ts@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/fp-ts/-/fp-ts-1.1.0.tgz#641c780a4c38f5a35ca471afb859ec6a5023e610"
 
 fs-extra@4.0.3:
   version "4.0.3"
@@ -2138,6 +2138,12 @@ parse-json@^2.2.0:
 parse5@4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/parse5/-/parse5-4.0.0.tgz#6d78656e3da8d78b4ec0b906f7c08ef1dfe3f608"
+
+parser-ts@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/parser-ts/-/parser-ts-0.5.0.tgz#b07743b81f861d6476d6f8af5e0fca193a17c095"
+  dependencies:
+    fp-ts "^1.0.1"
 
 path-exists@^2.0.0:
   version "2.1.0"

@@ -34,7 +34,8 @@
   "author": "Vítor Castro",
   "license": "MIT",
   "dependencies": {
-    "fp-ts": "^1.0.0"
+    "fp-ts": "^1.1.0",
+    "parser-ts": "^0.5.0"
   },
   "devDependencies": {
     "@types/jest": ">=22.0.1",

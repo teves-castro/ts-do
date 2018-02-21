@@ -5,7 +5,7 @@ import "../src/State"
 
 describe("Do/Let/Return", () => {
   describe("for State", () => {
-    it("chains scoped computations which perform effects", () => {
+    it("returns the same result as the equivalent chain pipeline", () => {
       const inc = (n: number) => n + 1
 
       const result = state
