@@ -4,7 +4,7 @@ import { get, modify, put } from "fp-ts/lib/State"
 import "../src/State"
 
 describe("Do/Let/Return", () => {
-  describe("for either", () => {
+  describe("for State", () => {
     it("chains scoped computations which perform effects", () => {
       const inc = (n: number) => n + 1
 
