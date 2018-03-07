@@ -2,9 +2,7 @@
   "name": "ts-do",
   "version": "1.0.5",
   "description": "Do like notation for typescript and fp-ts",
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "main": "dist/index.js",
   "typings": "dist/index.d.js",
   "scripts": {
@@ -16,14 +14,7 @@
     "test": "jest --testPathPattern=.+\\.spec\\.ts",
     "test:watch": "npm test -- --watch"
   },
-  "keywords": [
-    "functional",
-    "do",
-    "notation",
-    "fp-ts",
-    "let",
-    "for"
-  ],
+  "keywords": ["functional", "do", "notation", "fp-ts", "let", "for"],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/teves-castro/ts-do.git"
@@ -43,6 +34,7 @@
     "@types/ramda": "types/npm-ramda#dist",
     "jest": ">=22.1.4",
     "jest-matchers": ">=20.0.3",
+    "prettier": ">=1.11.1",
     "ramda": ">=0.25.0",
     "ts-jest": ">=22.0.1",
     "ts-lint": ">=4.5.1",
@@ -55,10 +47,6 @@
       "^.+\\.tsx?$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
     },
     "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(tsx?)$",
-    "moduleFileExtensions": [
-      "ts",
-      "js",
-      "json"
-    ]
+    "moduleFileExtensions": ["ts", "js", "json"]
   }
 }
