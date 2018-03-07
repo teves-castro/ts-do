@@ -10,7 +10,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "isolatedModules": false,
-    "lib": [ "es2016.array.include", "es6", "scripthost", "dom" ],
+    "lib": ["es2016.array.include", "es6", "scripthost", "dom"],
     "module": "commonjs",
     "moduleResolution": "node",
     "noImplicitAny": true,
@@ -27,15 +27,10 @@
     "stripInternal": true,
     "suppressImplicitAnyIndexErrors": true,
     "sourceMap": true,
-    "target": "es6"
+    "target": "es5"
   },
-  "exclude": [
-    "node_modules",
-    "src/monoid.ts"
-  ],
-  "include": [
-    "./src/**/*.ts"
-  ],
+  "exclude": ["node_modules", "src/monoid.ts"],
+  "include": ["./src/**/*.ts"],
   "jest": {
     "globals": {
       "ts-jest": {
