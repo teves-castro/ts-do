@@ -13,13 +13,13 @@ export type Steps2<T extends URIS, M extends URIS2, L, RA, RB> =
 export type Context<M extends URIS, N extends string, A, B> = Type<M, A & { [K in N]: B }>
 export type Context2<M extends URIS2, N extends string, L, RA, RB> = Type2<M, L, RA & { [K in N]: RB }>
 
-export type Do<M extends URIS> = <A>(other: Step<M, A, void>) => Type<M, A>
-export type Do2<M extends URIS2> = <L, R>(other: Step2<M, L, R, void>) => Type2<M, L, R>
+export type Do<M extends URIS> = <A>(other: Step<M, A, any>) => Type<M, A>
+export type Do2<M extends URIS2> = <L, R>(other: Step2<M, L, R, any>) => Type2<M, L, R>
 
 export function makeDo<M extends URIS>(M: Monad<M>): Do<M>
 export function makeDo<M extends URIS2>(M: Monad<M>): Do2<M>
 export function makeDo<M extends URIS>(M: Monad<M>) {
-  return function<A>(other: Step<M, A, void>) {
+  return function<A>(other: Step<M, A, any>) {
     const self = this as HKT<M, A>
     return M.chain(self, (previous: A) =>
       M.map((typeof other === "function" ? other(previous) : other) as HKT<any, void>, () => previous),

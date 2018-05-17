@@ -11,7 +11,7 @@ describe("Do/Let/Return", () => {
     it("chains scoped computations which perform effects", () => {
       const result = right(10)
         .into("x")
-        .do(right<string, void>(undefined))
+        .do(right<string, string>("some non void type"))
         .let("y", ({ x }) => right(x - 5))
         .return(({ x, y }) => x - y)
 

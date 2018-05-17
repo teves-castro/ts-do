@@ -4,7 +4,7 @@ import { makeDo, makeFor, makeLet } from "./builders"
 
 declare module "fp-ts/lib/Either" {
   interface Left<L, A> {
-    do(other: Either<L, void> | ((a: A) => Either<L, void>)): Either<L, A>
+    do(other: Either<L, any> | ((a: A) => Either<L, any>)): Either<L, A>
     into<N extends string>(name: N): Either<L, { [K in N]: A }>
     let<N extends string, B>(name: N, other: Either<L, B> | ((a: A) => Either<L, B>)): Either<L, A & { [K in N]: B }>
     for<N extends string, B>(
@@ -14,7 +14,7 @@ declare module "fp-ts/lib/Either" {
     return<B>(f: (a: A) => B): Either<L, B>
   }
   interface Right<L, A> {
-    do(other: Either<L, void> | ((a: A) => Either<L, void>)): Either<L, A>
+    do(other: Either<L, any> | ((a: A) => Either<L, any>)): Either<L, A>
     into<N extends string>(name: N): Either<L, { [K in N]: A }>
     let<N extends string, B>(name: N, other: Either<L, B> | ((a: A) => Either<L, B>)): Either<L, A & { [K in N]: B }>
     for<N extends string, B>(
