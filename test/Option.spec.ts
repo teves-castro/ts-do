@@ -63,6 +63,30 @@ describe("Do/Let/Return", () => {
       expect(result).toEqual(none)
     })
 
+    it("short circuits none.do", () => {
+      const result = none.do(() => some(10)).return(throwUnexpectedCall)
+
+      expect(result).toEqual(none)
+    })
+
+    it("short circuits none.into", () => {
+      const result = none.into("x").return(throwUnexpectedCall)
+
+      expect(result).toEqual(none)
+    })
+
+    it("short circuits none.let", () => {
+      const result = none.let("x", some(10)).return(throwUnexpectedCall)
+
+      expect(result).toEqual(none)
+    })
+
+    it("short circuits none.for", () => {
+      const result = none.for("ys", throwUnexpectedCall).return(throwUnexpectedCall)
+
+      expect(result).toEqual(none)
+    })
+
     it("short circuits computations with effects", () => {
       const result = some(10)
         .into("x")
