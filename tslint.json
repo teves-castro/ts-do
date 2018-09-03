@@ -4,7 +4,6 @@
     "arrow-parens": [false],
     "no-console": [false],
     "no-default-export": true,
-    "no-unused-variable": true,
     "semicolon": [true, "never"],
     "triple-equals": [true, "allow-undefined-check"],
     "max-classes-per-file": [false],

@@ -49,11 +49,11 @@
     "ts-lint": ">=4.5.1",
     "ts-node": ">=4.1.0",
     "tslint": "^5.9.1",
-    "typescript": ">=2.7.1"
+    "typescript": "^3.0.3"
   },
   "jest": {
     "transform": {
-      "^.+\\.tsx?$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+      "^.+\\.tsx?$": "ts-jest"
     },
     "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(tsx?)$",
     "moduleFileExtensions": [
