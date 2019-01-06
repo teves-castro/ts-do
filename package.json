@@ -11,10 +11,10 @@
     "build": "rm -rf dist/ && tsc -d -p tsconfig.dist.json",
     "builddev": "rm -rf dist/ && tsc -d -p tsconfig.json",
     "lint": "tslint src/**/*.ts test/**/*.ts",
-    "prepare": "npm run build",
-    "pretest": "npm run lint",
+    "prepare": "yarn run build",
+    "pretest": "yarn run lint",
     "test": "jest --coverage --testPathPattern=.+\\.spec\\.ts",
-    "test:watch": "npm test -- --watch"
+    "test:watch": "yarn test -- --watch"
   },
   "keywords": [
     "functional",
