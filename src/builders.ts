@@ -22,7 +22,7 @@ export function makeDo<M extends URIS>(M: Monad<M>) {
   return function<A>(other: Step<M, A, any>) {
     const self = this as HKT<M, A>
     return M.chain(self, (previous: A) =>
-      M.map((typeof other === "function" ? other(previous) : other) as HKT<any, void>, () => previous),
+      M.map((other instanceof Function ? other(previous) : other) as HKT<any, void>, () => previous),
     )
   }
 }
@@ -44,7 +44,7 @@ export function makeLet<M extends URIS>(M: Monad<M>) {
     const self = this
     if (other) {
       return M.chain(self, previous =>
-        M.map(typeof other === "function" ? other(previous) : other, value =>
+        M.map(other instanceof Function ? other(previous) : other, value =>
           Object.assign({}, previous, { [name]: value }),
         ),
       )
@@ -70,7 +70,7 @@ export function makeFor<M extends URIS, T extends URIS>(M: Monad<M>, T: Traversa
   return function<N extends string>(name: N, others: any) {
     const self = this
     return M.chain(self, previous => {
-      const os = typeof others === "function" ? others(previous) : others
+      const os = others instanceof Function ? others(previous) : others
       return M.map(seq(os), values => Object.assign({}, previous, { [name]: values }))
     })
   }
