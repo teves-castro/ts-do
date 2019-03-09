@@ -11,7 +11,7 @@ describe("Do/Let/Return", () => {
     it("chains scoped computations which perform effects", () => {
       const result = right(10)
         .into("x")
-        .do(right<string, string>("some non void type"))
+        .do(right(undefined))
         .let("y", ({ x }) => right(x - 5))
         .return(({ x, y }) => x - y)
 
@@ -30,7 +30,7 @@ describe("Do/Let/Return", () => {
     it("chains multiple scoped computations", () => {
       const result = right(23)
         .into("x")
-        .for("ys", ({ x }) => range(0, x).map(() => right<string, number>(1)))
+        .for("ys", ({ x }) => range(0, x).map(() => right(1)))
         .return(({ x, ys }) => x - sum(ys))
 
       expect(result).toEqual(right(0))
@@ -56,7 +56,7 @@ describe("Do/Let/Return", () => {
 
     it("short circuits left.do", () => {
       const result = left("some error")
-        .do(() => right(10))
+        .do(() => right(undefined))
         .return(throwUnexpectedCall)
 
       expect(result).toEqual(left("some error"))

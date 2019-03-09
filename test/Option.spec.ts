@@ -64,7 +64,7 @@ describe("Do/Let/Return", () => {
     })
 
     it("short circuits none.do", () => {
-      const result = none.do(() => some(10)).return(throwUnexpectedCall)
+      const result = none.do(() => some(undefined)).return(throwUnexpectedCall)
 
       expect(result).toEqual(none)
     })

@@ -4,7 +4,7 @@ import { makeDo, makeFor, makeLet } from "./builders"
 
 declare module "fp-ts/lib/TaskEither" {
   interface TaskEither<L, A> {
-    do(other: TaskEither<L, any> | ((a: A) => TaskEither<L, any>)): TaskEither<L, A>
+    do(other: TaskEither<L, void> | ((a: A) => TaskEither<L, void>)): TaskEither<L, A>
     into<N extends string>(name: N): TaskEither<L, { [K in N]: A }>
     let<N extends string, B>(
       name: N,

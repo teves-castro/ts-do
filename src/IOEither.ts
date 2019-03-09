@@ -4,7 +4,7 @@ import { makeDo, makeFor, makeLet } from "./builders"
 
 declare module "fp-ts/lib/IOEither" {
   interface IOEither<L, A> {
-    do(other: IOEither<L, any> | ((a: A) => IOEither<L, any>)): IOEither<L, A>
+    do(other: IOEither<L, void> | ((a: A) => IOEither<L, void>)): IOEither<L, A>
     into<N extends string>(name: N): IOEither<L, { [K in N]: A }>
     let<N extends string, B>(
       name: N,

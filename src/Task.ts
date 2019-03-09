@@ -4,7 +4,7 @@ import { makeDo, makeFor, makeLet } from "./builders"
 
 declare module "fp-ts/lib/Task" {
   interface Task<A> {
-    do(other: Task<any> | ((a: A) => Task<any>)): Task<A>
+    do(other: Task<void> | ((a: A) => Task<void>)): Task<A>
     into<N extends string>(name: N): Task<{ [K in N]: A }>
     let<N extends string, B>(name: N, other: Task<B> | ((a: A) => Task<B>)): Task<A & { [K in N]: B }>
     for<N extends string, B>(

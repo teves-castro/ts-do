@@ -4,7 +4,7 @@ import { makeDo, makeFor, makeLet } from "./builders"
 
 declare module "fp-ts/lib/IO" {
   interface IO<A> {
-    do(other: IO<any> | ((a: A) => IO<any>)): IO<A>
+    do(other: IO<void> | ((a: A) => IO<void>)): IO<A>
     into<N extends string>(name: N): IO<{ [K in N]: A }>
     let<N extends string, B>(name: N, other: IO<B> | ((a: A) => IO<B>)): IO<A & { [K in N]: B }>
     for<N extends string, B>(
