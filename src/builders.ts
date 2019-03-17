@@ -18,9 +18,9 @@ export type Context<M extends URIS, N extends string, A, B> = Type<M, A & { [K i
 export type Context2<M extends URIS2, N extends string, L, RA, RB> = Type2<M, L, RA & { [K in N]: RB }>
 export type Context3<M extends URIS3, N extends string, E, L, RA, RB> = Type3<M, E, L, RA & { [K in N]: RB }>
 
-export type Do<M extends URIS> = <A>(other: Step<M, A, void>) => Type<M, A>
-export type Do2<M extends URIS2> = <L, R>(other: Step2<M, L, R, void>) => Type2<M, L, R>
-export type Do3<M extends URIS3> = <E, L, R>(other: Step3<M, E, L, R, void>) => Type3<M, E, L, R>
+export type Do<M extends URIS> = <A>(other: Step<M, A, any>) => Type<M, A>
+export type Do2<M extends URIS2> = <L, R>(other: Step2<M, L, R, any>) => Type2<M, L, R>
+export type Do3<M extends URIS3> = <E, L, R>(other: Step3<M, E, L, R, any>) => Type3<M, E, L, R>
 
 export function makeDo<M extends URIS3>(M: Monad<M>): Do3<M>
 export function makeDo<M extends URIS2>(M: Monad<M>): Do2<M>
