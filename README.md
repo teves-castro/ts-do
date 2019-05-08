@@ -8,7 +8,7 @@ It is also possible (and relatively easy) to use the builders to add support for
 
 To install the stable version:
 
-```
+```bash
 yarn install ts-do
 ```
 
@@ -16,7 +16,7 @@ yarn install ts-do
 
 Start by importing the extension:
 
-```
+```typescript
 import { some } from "fp-ts/lib/Option"
 import { range, sum } from "ramda"
 import "ts-do"
@@ -36,25 +36,25 @@ Check the test folder for a few more examples.
 
 Clone the repo
 
-```
+```bash
 git clone git@github.com:teves-castro/ts-do.git
 ```
 
 Install dependencies
 
-```
+```bash
 yarn
 ```
 
 Test
 
-```
+```bash
 yarn run test
 ```
 
 Compile
 
-```
+```bash
 yarn run build
 ```
 
