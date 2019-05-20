@@ -1,6 +1,6 @@
 {
   "name": "ts-do",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Do like notation for typescript and fp-ts",
   "files": [
     "dist"
