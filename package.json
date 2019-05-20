@@ -39,7 +39,7 @@
   "devDependencies": {
     "@types/jest": ">=22.0.1",
     "@types/jest-matchers": ">=20.0.1",
-    "@types/ramda": "^0.25.20",
+    "@types/ramda": "^0.26.8",
     "jest": ">=22.1.4",
     "jest-matchers": ">=20.0.3",
     "prettier": ">=1.11.1",

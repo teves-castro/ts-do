@@ -18,11 +18,14 @@
     {
       "label": "Build",
       "type": "typescript",
+      "option": "watch",
+      "problemMatcher":"$tsc-watch",
       "tsconfig": "tsconfig.json",
       "group": {
         "kind": "build",
         "isDefault": true
       },
+      "isBackground": true,
       "presentation": {
         "echo": true,
         "reveal": "silent",
