@@ -9,7 +9,7 @@ It is also possible (and relatively easy) to use the builders to add support for
 To install the stable version:
 
 ```bash
-yarn install ts-do
+yarn add ts-do
 ```
 
 # Using the extension
