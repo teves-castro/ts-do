@@ -1,6 +1,6 @@
 {
   "name": "ts-do",
-  "version": "2.0.0-rc",
+  "version": "2.0.0-rc1",
   "description": "Do like notation for typescript and fp-ts",
   "files": [
     "dist"
@@ -22,7 +22,11 @@
     "notation",
     "fp-ts",
     "let",
-    "for"
+    "for",
+    "exec",
+    "bind",
+    "sequence",
+    "into"
   ],
   "repository": {
     "type": "git",
