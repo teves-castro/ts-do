@@ -1,8 +1,8 @@
 # Description
 
-This library works as an extension for [fp-ts](https://github.com/gcanti/fp-ts) allowing the usage of a haskell like do notation. One can use .do, .let, .for and .into to chain computations on any of the supplied monads.
-Each .let or .for in the computation chain contributes to a threaded context that is available to each subsequent step. A .do method can also be used to perform computations that add nothing to the context.
-It is also possible (and relatively easy) to use the builders to add support for other monads.
+This library works as an extension for [fp-ts](https://github.com/gcanti/fp-ts) allowing the usage of a haskell like do notation. One can use exec, bind, sequence and into to chain computations on any of the supplied monads.
+Each bind or sequence in the computation chain contributes to a threaded context that is available to each subsequent step. The exec function can also be used to perform computations that add nothing to the context for their side-effects.
+It is possible to use this with any monads as long as its kind is defined in ft-ts.
 
 # Installation
 
@@ -17,15 +17,23 @@ yarn add ts-do
 Start by importing the extension:
 
 ```typescript
-import { some } from "fp-ts/lib/Option"
+import { some, map } from "fp-ts/lib/Option"
+import { pipe } from "fp-ts/lib/pipeable"
 import { range, sum } from "ramda"
-import "ts-do"
+import * as Do from "ts-do"
 
-const result = some(3)
-    .into("x")                                              // Chains the computation. Creates a context with { x: 3 }
-    .do(some(undefined))                                    // Chains the computation. Adds nothing to the context
-    .for("ys", ({ x }) => range(0, x).map(() => some(1)))   // Sequences computations. Adds { ys: [1, 1, 1] } to the context
-    .return(({ x, ys }) => x - sum(ys))
+const bind = Do.bind(option)
+const into = Do.into(option)
+const exec = Do.exec(option)
+const sequence = Do.sequence(array, option)
+
+const result = pipe(
+  some(3),
+  into("x"), // Chains the computation. Creates a context with { x: 3 }
+  exec(() => some(undefined)), // Chains the computation. Adds nothing to the context
+  sequence("ys", ({ x }) => range(0, x).map(() => some(1))), // Sequences computations. Adds { ys: [1, 1, 1] } to the context
+  map(({ x, ys }) => x - sum(ys)),
+)
 
 // result === some(0)
 ```

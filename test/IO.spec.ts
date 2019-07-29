@@ -1,25 +1,29 @@
-import { IO } from "fp-ts/lib/IO"
+import { array } from "fp-ts/lib/Array"
+import { io, of } from "fp-ts/lib/IO"
+import { pipe } from "fp-ts/lib/pipeable"
 import { range } from "ramda"
-import "../src/IO"
+import * as Do from "../src/index"
+
+const into = Do.into(io)
+const exec = Do.exec(io)
+const sequence = Do.sequence(array, io)
 
 describe("Do/Let/Return", () => {
   describe("for task", () => {
     let log: string[] = []
-    const read = (message: string) => new IO(() => message)
-    const append = (message: string) =>
-      new IO(() => {
-        log.push(message)
-      })
+    const read = (message: string) => of(message)
+    const append = (message: string) => of(log.push(message))
     const clear = () => (log = [])
 
     it("chains scoped computations", async () => {
       clear()
 
-      await read("John Doe")
-        .into("name")
-        .do(({ name }) => append(`Hello ${name}!`))
-        .do(append("Welcome!"))
-        .run()
+      pipe(
+        read("John Doe"),
+        into("name"),
+        exec(({ name }) => append(`Hello ${name}!`)),
+        exec(() => append("Welcome!")),
+      )()
 
       expect(log).toEqual(["Hello John Doe!", "Welcome!"])
     })
@@ -27,9 +31,10 @@ describe("Do/Let/Return", () => {
     it("chains multiple scoped computations", async () => {
       clear()
 
-      await append("Hello")
-        .for("ys", range(0, 4).map(i => append(`${i + 1}`)))
-        .run()
+      pipe(
+        append("Hello"),
+        sequence("ys", () => range(0, 4).map(i => append(`${i + 1}`))),
+      )()
 
       expect(log).toEqual(["Hello", "1", "2", "3", "4"])
     })

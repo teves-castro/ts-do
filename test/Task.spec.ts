@@ -1,38 +1,48 @@
-import { Task } from "fp-ts/lib/Task"
+import { array } from "fp-ts/lib/Array"
+import { pipe } from "fp-ts/lib/pipeable"
+import { delay, map, of, task } from "fp-ts/lib/Task"
 import { range, sum } from "ramda"
-import "../src/index"
+import * as Do from "../src/index"
+
+const bind = Do.bind(task)
+const into = Do.into(task)
+const exec = Do.exec(task)
+const sequence = Do.sequence(array, task)
 
 describe("Do/Let/Return", () => {
   describe("for task", () => {
-    const delayValue = <T>(d: number, v: T) =>
-      new Task(() => new Promise<T>(resolve => setTimeout(() => resolve(v), d)))
-
     it("chains scoped computations", async () => {
-      const result = delayValue(100, 23)
-        .into("x")
-        .let("y", delayValue(200, 10))
-        .return(({ x, y }) => x - y)
+      const result = pipe(
+        of(23),
+        into("x"),
+        bind("y", ({ x }) => delay(200)(of(10))),
+        map(({ x, y }) => x - y),
+      )
 
-      expect(await result.run()).toEqual(13)
+      expect(await result()).toEqual(13)
     })
 
     it("chains scoped computations with effects", async () => {
-      const result = delayValue(100, 23)
-        .into("x")
-        .do(delayValue(100, undefined))
-        .let("y", delayValue(200, 10))
-        .return(({ x, y }) => x - y)
+      const result = pipe(
+        of(23),
+        into("x"),
+        exec(() => of(undefined)),
+        bind("y", () => of(10)),
+        map(({ x, y }) => x - y),
+      )
 
-      expect(await result.run()).toEqual(13)
+      expect(await result()).toEqual(13)
     })
 
     it("chains multiple scoped computations", async () => {
-      const result = delayValue(10, 23)
-        .into("x")
-        .for("ys", ({ x }) => range(0, x).map(() => delayValue(10, 1)))
-        .return(({ x, ys }) => x - sum(ys))
+      const result = pipe(
+        of(23),
+        into("x"),
+        sequence("ys", ({ x }) => range(0, x).map(() => of(1))),
+        map(({ x, ys }) => x - sum(ys)),
+      )
 
-      expect(await result.run()).toEqual(0)
+      expect(await result()).toEqual(0)
     })
   })
 })

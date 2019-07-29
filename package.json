@@ -1,6 +1,6 @@
 {
   "name": "ts-do",
-  "version": "1.2.3",
+  "version": "2.0.0-rc",
   "description": "Do like notation for typescript and fp-ts",
   "files": [
     "dist"
@@ -34,7 +34,7 @@
   "author": "Vítor Castro",
   "license": "MIT",
   "dependencies": {
-    "fp-ts": "^1.1.0"
+    "fp-ts": "^2.0.0"
   },
   "devDependencies": {
     "@types/jest": ">=22.0.1",

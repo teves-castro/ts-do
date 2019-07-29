@@ -1,29 +1,27 @@
-import { constant } from "fp-ts/lib/function"
-import { state } from "fp-ts/lib/State"
-import { get, modify, put } from "fp-ts/lib/State"
-import "../src/State"
+import { pipe } from "fp-ts/lib/pipeable"
+import { get, map, modify, of, put, state } from "fp-ts/lib/State"
+import * as Do from "../src/index"
+
+const bind = Do.bind(state)
+const into = Do.into(state)
+const exec = Do.exec(state)
 
 describe("Do/Let/Return", () => {
   describe("for State", () => {
     it("returns the same result as the equivalent chain pipeline", () => {
       const inc = (n: number) => n + 1
 
-      const result = state
-        .of<number, string>("Hello")
-        .into("x")
-        .do(modify(inc))
-        .let("y", get<number>())
-        .do(put(42))
-        .let("z", get<number>())
+      const result = pipe(
+        of<number, number>(1),
+        into("x"),
+        exec(() => modify(inc)),
+        bind("y", () => get()),
+        exec(() => put(42)),
+        bind("z", () => get()),
+        map(({ x, y, z }) => x + y + z),
+      )(1)
 
-      const expected = state
-        .of<number, string>("Hello")
-        .chain(x => modify(inc).map(constant({ x })))
-        .chain(ctx => get<number>().map(y => ({ ...ctx, y })))
-        .chain(ctx => put(42).map(constant(ctx)))
-        .chain(ctx => get<number>().map(z => ({ ...ctx, z })))
-
-      expect(result.run(1)).toEqual(expected.run(1))
+      expect(result).toEqual([45, 42])
     })
   })
 })

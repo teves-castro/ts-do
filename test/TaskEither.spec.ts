@@ -1,7 +1,14 @@
+import { array } from "fp-ts/lib/Array"
 import { left, right } from "fp-ts/lib/Either"
-import { fromEither, TaskEither } from "fp-ts/lib/TaskEither"
+import { pipe } from "fp-ts/lib/pipeable"
+import { fromEither, map, TaskEither, taskEither } from "fp-ts/lib/TaskEither"
 import { range, sum } from "ramda"
-import "../src/index"
+import * as Do from "../src/index"
+
+const bind = Do.bind(taskEither)
+const into = Do.into(taskEither)
+const exec = Do.exec(taskEither)
+const sequence = Do.sequence(array, taskEither)
 
 const throwUnexpectedCall = () => {
   throw new Error("Unexpected call")
@@ -13,76 +20,94 @@ describe("Do/Let/Return", () => {
     const failure: (l: string) => TaskEither<string, never> = l => fromEither(left(l))
 
     it("chains scoped computations when using value", async () => {
-      const result = success(10)
-        .into("x")
-        .let("y", success(5))
-        .return(({ x, y }) => x - y)
+      const result = pipe(
+        success(10),
+        into("x"),
+        bind("y", () => success(5)),
+        map(({ x, y }) => x - y),
+      )
 
-      await result.fold(throwUnexpectedCall, r => expect(r).toEqual(5)).run()
+      expect(await result()).toEqual(right(5))
     })
 
     it("chains scoped computations when using function", async () => {
-      const result = success(3)
-        .into("x")
-        .let("y", ({ x }) => success(x.toString()))
-        .return(({ x, y }) => y + x)
+      const result = pipe(
+        success(3),
+        into("x"),
+        bind("y", ({ x }) => success(x.toString())),
+        map(({ x, y }) => y + x),
+      )
 
-      await result.fold(throwUnexpectedCall, r => expect(r).toEqual("33")).run()
+      expect(await result()).toEqual(right("33"))
     })
 
     it("chains scoped computations with effects", async () => {
-      const result = success(10)
-        .into("x")
-        .do(success(undefined))
-        .let("y", success(5))
-        .return(({ x, y }) => x - y)
+      const result = pipe(
+        success(10),
+        into("x"),
+        exec(() => success(undefined)),
+        bind("y", () => success(5)),
+        map(({ x, y }) => x - y),
+      )
 
-      await result.fold(throwUnexpectedCall, r => expect(r).toEqual(5)).run()
+      expect(await result()).toEqual(right(5))
     })
 
     it("chains multiple scoped computations", async () => {
-      const result = success(23)
-        .into("x")
-        .for("ys", ({ x }) => range(0, x).map(() => success(1)))
-        .return(({ x, ys }) => x - sum(ys))
+      const result = pipe(
+        success(23),
+        into("x"),
+        sequence("ys", ({ x }) => range(0, x).map(() => success(1))),
+        map(({ x, ys }) => x - sum(ys)),
+      )
 
-      await result.fold(throwUnexpectedCall, r => expect(r).toEqual(0)).run()
+      expect(await result()).toEqual(right(0))
     })
 
     it("short circuits scoped computations when using value", async () => {
-      const result = success(3)
-        .into("x")
-        .do(failure("some error"))
-        .return(() => throwUnexpectedCall)
+      const result = pipe(
+        success(3),
+        into("x"),
+        exec(() => failure("some error")),
+        map(throwUnexpectedCall),
+      )
 
-      await result.fold(message => expect(message).toBe("some error"), throwUnexpectedCall).run()
+      expect(await result()).toEqual(left("some error"))
     })
 
     it("short circuits scoped computations when using function", async () => {
-      const result = success(3)
-        .into("x")
-        .do(failure("some error"))
-        .return(() => throwUnexpectedCall)
+      const result = pipe(
+        success(3),
+        into("x"),
+        exec(() => failure("some error")),
+        map(throwUnexpectedCall),
+      )
 
-      await result.fold(message => expect(message).toBe("some error"), throwUnexpectedCall).run()
+      expect(await result()).toEqual(left("some error"))
     })
 
     it("short circuits scoped computations with effects", async () => {
-      const result = success(3)
-        .into("x")
-        .do(failure("some error"))
-        .return(() => throwUnexpectedCall)
+      const result = pipe(
+        success(3),
+        into("x"),
+        exec(() => failure("some error")),
+        map(throwUnexpectedCall),
+      )
 
-      await result.fold(message => expect(message).toBe("some error"), throwUnexpectedCall).run()
+      expect(await result()).toEqual(left("some error"))
     })
 
     it("short circuits multiple scoped computations", async () => {
-      const result = success(23)
-        .into("x")
-        .for("ys", ({ x }) => range(0, x).map(i => (i === 3 ? failure("some error") : success(1))))
-        .return(() => throwUnexpectedCall)
+      const result = pipe(
+        success(23),
+        into("x"),
+        sequence("ys", ({ x }) =>
+          range(0, x).map(i => (i === 3 ? failure("some error") : success(1))),
+        ),
+        map(throwUnexpectedCall),
+      )
 
-      await result.fold(e => expect(e).toEqual("some error"), throwUnexpectedCall).run()
+      expect(await result()).toEqual(left("some error"))
     })
   })
 })
