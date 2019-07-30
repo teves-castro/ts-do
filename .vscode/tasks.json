@@ -19,7 +19,7 @@
       "label": "Build",
       "type": "typescript",
       "option": "watch",
-      "problemMatcher":"$tsc-watch",
+      "problemMatcher": "$tsc-watch",
       "tsconfig": "tsconfig.json",
       "group": {
         "kind": "build",
@@ -27,7 +27,7 @@
       },
       "isBackground": true,
       "presentation": {
-        "echo": true,
+        "echo": false,
         "reveal": "silent",
         "focus": false,
         "panel": "shared"

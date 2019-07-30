@@ -1,10 +1,4 @@
 {
-  "awesomeTypescriptLoaderOptions": {
-    "useBabel": false,
-    "useCache": true
-  },
-  "buildOnSave": false,
-  "compileOnSave": true,
   "compilerOptions": {
     "declaration": false,
     "emitDecoratorMetadata": true,
@@ -18,7 +12,7 @@
     "noImplicitUseStrict": false,
     "noLib": false,
     "noUnusedLocals": true,
-    "outDir": "./temp/",
+    "outDir": "./.temp/",
     "preserveConstEnums": true,
     "removeComments": true,
     "strict": true,
@@ -39,8 +33,5 @@
         "skipBabel": true
       }
     }
-  },
-  "atom": {
-    "rewriteTsconfig": false
   }
 }
