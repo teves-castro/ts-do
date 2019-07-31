@@ -7,7 +7,7 @@ import * as Do from "../src/index"
 const bind = Do.bind(either)
 const into = Do.into(either)
 const exec = Do.exec(either)
-const sequence = Do.sequence(array, either)
+const sequence = Do.parallel(array, either)
 
 const throwUnexpectedCall = () => {
   throw new Error("Unexpected call")

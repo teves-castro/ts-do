@@ -6,7 +6,7 @@ import * as Do from "../src/index"
 
 const into = Do.into(io)
 const exec = Do.exec(io)
-const sequence = Do.sequence(array, io)
+const sequence = Do.parallel(array, io)
 
 describe("Do/Let/Return", () => {
   describe("for task", () => {

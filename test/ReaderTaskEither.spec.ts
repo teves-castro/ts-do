@@ -15,7 +15,7 @@ import * as Do from "../src/index"
 const bind = Do.bind(readerTaskEither)
 const into = Do.into(readerTaskEither)
 const exec = Do.exec(readerTaskEither)
-const sequence = Do.sequence(array, readerTaskEither)
+const sequence = Do.parallel(array, readerTaskEither)
 
 const throwUnexpectedCall = () => {
   throw new Error("Unexpected call")

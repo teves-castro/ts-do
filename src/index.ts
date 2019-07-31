@@ -1,5 +1,8 @@
+import { Applicative1 } from "fp-ts/lib/Applicative"
 import { Kind, Kind2, Kind3, Kind4, URIS, URIS2, URIS3, URIS4 } from "fp-ts/lib/HKT"
 import { Monad1, Monad2, Monad3, Monad4 } from "fp-ts/lib/Monad"
+import { Monoid } from "fp-ts/lib/Monoid"
+import { pipe } from "fp-ts/lib/pipeable"
 import { Traversable1 } from "fp-ts/lib/Traversable"
 
 type Kleisli<M extends URIS, A, B> = (a: A) => Kind<M, B>
@@ -94,7 +97,7 @@ export function exec<M extends URIS>(M: Monad1<M>) {
 }
 
 // Sequence
-export function sequence<T extends URIS, M extends URIS4>(
+export function parallel<T extends URIS, M extends URIS4>(
   T: Traversable1<T>,
   M: Monad4<M>,
 ): <S, E, L, A, B, N extends string>(
@@ -102,7 +105,7 @@ export function sequence<T extends URIS, M extends URIS4>(
   fb: Kleisli<T, A, Kind4<M, S, E, L, B>>,
 ) => (fa: Kind4<M, S, E, L, A>) => Kind4<M, S, E, L, A & { [K in N]: Kind<T, B> }>
 
-export function sequence<T extends URIS, M extends URIS3>(
+export function parallel<T extends URIS, M extends URIS3>(
   T: Traversable1<T>,
   M: Monad3<M>,
 ): <E, L, A, B, N extends string>(
@@ -110,7 +113,7 @@ export function sequence<T extends URIS, M extends URIS3>(
   fb: Kleisli<T, A, Kind3<M, E, L, B>>,
 ) => (fa: Kind3<M, E, L, A>) => Kind3<M, E, L, A & { [K in N]: Kind<T, B> }>
 
-export function sequence<T extends URIS, M extends URIS2>(
+export function parallel<T extends URIS, M extends URIS2>(
   T: Traversable1<T>,
   M: Monad2<M>,
 ): <L, A, B, N extends string>(
@@ -118,7 +121,7 @@ export function sequence<T extends URIS, M extends URIS2>(
   fb: Kleisli<T, A, Kind2<M, L, B>>,
 ) => (fa: Kind2<M, L, A>) => Kind2<M, L, A & { [K in N]: Kind<T, B> }>
 
-export function sequence<T extends URIS, M extends URIS>(
+export function parallel<T extends URIS, M extends URIS>(
   T: Traversable1<T>,
   M: Monad1<M>,
 ): <A, B, N extends string>(
@@ -126,12 +129,45 @@ export function sequence<T extends URIS, M extends URIS>(
   fb: Kleisli<T, A, Kind<M, B>>,
 ) => (fa: Kind<M, A>) => Kind<M, A & { [K in N]: Kind<T, B> }>
 
-export function sequence<T extends URIS, M extends URIS>(
+export function parallel<T extends URIS, M extends URIS>(
   T: Traversable1<T>,
   M: Monad1<M>,
 ) {
   return <A, B, N extends string>(n: N, fb: Kleisli<T, A, Kind<M, B>>) => (
     fa: Kind<M, A>,
   ) =>
-    M.chain(fa, a => M.map(T.sequence(M)(fb(a)), v => Object.assign({}, a, { [n]: v })))
+    M.chain(fa, a =>
+      M.map(
+        pipe(
+          fb(a),
+          T.sequence(M),
+        ),
+        v => Object.assign({}, a, { [n]: v }),
+      ),
+    )
+}
+
+export function sequence<T extends URIS, M extends URIS, B>(
+  T: Applicative1<T> & Traversable1<T>,
+  M: Monad1<M>,
+  O: Monoid<Kind<T, B>>,
+): <A, N extends string>(
+  n: N,
+  fb: Kleisli<T, A, Kind<M, B>>,
+) => (fa: Kind<M, A>) => Kind<M, A & { [K in N]: Kind<T, B> }>
+
+export function sequence<T extends URIS, M extends URIS, B>(
+  T: Applicative1<T> & Traversable1<T>,
+  M: Monad1<M>,
+  O: Monoid<Kind<T, B>>,
+) {
+  return <A, N extends string>(n: N, fb: Kleisli<T, A, Kind<M, B>>) => (fa: Kind<M, A>) =>
+    M.chain(fa, a =>
+      M.map(
+        T.reduce(fb(a), M.of(O.empty), (acc, b) =>
+          M.chain(acc, av => M.map(b, bv => O.concat(av, T.of(bv)))),
+        ),
+        bs => Object.assign({}, a, { [n]: bs }),
+      ),
+    )
 }

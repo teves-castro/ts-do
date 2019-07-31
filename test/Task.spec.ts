@@ -1,13 +1,24 @@
-import { array } from "fp-ts/lib/Array"
+import { array, getMonoid } from "fp-ts/lib/Array"
 import { pipe } from "fp-ts/lib/pipeable"
-import { delay, map, of, task } from "fp-ts/lib/Task"
-import { range, sum } from "ramda"
+import { delay, map, of, task, Task } from "fp-ts/lib/Task"
+import { range } from "ramda"
 import * as Do from "../src/index"
 
 const bind = Do.bind(task)
 const into = Do.into(task)
 const exec = Do.exec(task)
-const sequence = Do.sequence(array, task)
+export const parallel = Do.parallel(array, task)
+export const sequence = Do.sequence(array, task, getMonoid<any>())
+
+export const log: (m: string) => <T>(t: Task<T>) => Task<T> = m => t =>
+  task.map(t, tv => (console.log(`${m} -> ${tv}`), tv))
+
+export const randomDelay = (m: string = "") => <T>(t: T) =>
+  pipe(
+    of(t),
+    delay(Math.random() * 200),
+    log(m),
+  )
 
 describe("Do/Let/Return", () => {
   describe("for task", () => {
@@ -34,15 +45,20 @@ describe("Do/Let/Return", () => {
       expect(await result()).toEqual(13)
     })
 
-    it("chains multiple scoped computations", async () => {
+    it.only("chains multiple scoped computations", async () => {
       const result = pipe(
-        of(23),
+        of(23000),
         into("x"),
-        sequence("ys", ({ x }) => range(0, x).map(() => of(1))),
-        map(({ x, ys }) => x - sum(ys)),
+        // sequence("is", ({ x }) => range(0, x).map(randomDelay("s"))),
+        // parallel("ys", ({ x }) => range(0, x).map(randomDelay("p"))),
+        sequence("is", ({ x }) => range(0, x).map(i => task.of(i))),
+        parallel("ys", ({ x }) => range(0, x).map(i => task.of(i))),
+        exec(({ x, ys }) => task.of(expect(ys).toEqual(range(0, x)))),
       )
 
-      expect(await result()).toEqual(0)
+      const r = await result()
+      console.log(r)
+      // expect(r).toEqual(range(0, 23))
     })
   })
 })

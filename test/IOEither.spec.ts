@@ -7,7 +7,7 @@ import * as Do from "../src/index"
 const bind = Do.bind(ioEither)
 const into = Do.into(ioEither)
 const exec = Do.exec(ioEither)
-const sequence = Do.sequence(array, ioEither)
+const sequence = Do.parallel(array, ioEither)
 
 const throwUnexpectedCall = () => {
   throw new Error("Unexpected call")
