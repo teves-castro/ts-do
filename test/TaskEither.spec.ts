@@ -1,7 +1,7 @@
 import { array } from "fp-ts/lib/Array"
-import { left, right } from "fp-ts/lib/Either"
+import * as either from "fp-ts/lib/Either"
 import { pipe } from "fp-ts/lib/pipeable"
-import { fromEither, map, TaskEither, taskEither } from "fp-ts/lib/TaskEither"
+import { left, map, right, TaskEither, taskEither } from "fp-ts/lib/TaskEither"
 import { range, sum } from "ramda"
 import * as Do from "../src/index"
 
@@ -16,8 +16,8 @@ const throwUnexpectedCall = () => {
 
 describe("Do/Let/Return", () => {
   describe("for TaskEither", () => {
-    const success: <R>(r: R) => TaskEither<string, R> = r => fromEither(right(r))
-    const failure: (l: string) => TaskEither<string, never> = l => fromEither(left(l))
+    const success: <R>(r: R) => TaskEither<string, R> = r => right(r)
+    const failure: (l: string) => TaskEither<string, never> = l => left(l)
 
     it("chains scoped computations when using value", async () => {
       const result = pipe(
@@ -27,7 +27,7 @@ describe("Do/Let/Return", () => {
         map(({ x, y }) => x - y),
       )
 
-      expect(await result()).toEqual(right(5))
+      expect(await result()).toEqual(either.right(5))
     })
 
     it("chains scoped computations when using function", async () => {
@@ -38,7 +38,7 @@ describe("Do/Let/Return", () => {
         map(({ x, y }) => y + x),
       )
 
-      expect(await result()).toEqual(right("33"))
+      expect(await result()).toEqual(either.right("33"))
     })
 
     it("chains scoped computations with effects", async () => {
@@ -50,7 +50,7 @@ describe("Do/Let/Return", () => {
         map(({ x, y }) => x - y),
       )
 
-      expect(await result()).toEqual(right(5))
+      expect(await result()).toEqual(either.right(5))
     })
 
     it("chains multiple scoped computations", async () => {
@@ -61,7 +61,7 @@ describe("Do/Let/Return", () => {
         map(({ x, ys }) => x - sum(ys)),
       )
 
-      expect(await result()).toEqual(right(0))
+      expect(await result()).toEqual(either.right(0))
     })
 
     it("short circuits scoped computations when using value", async () => {
@@ -72,7 +72,7 @@ describe("Do/Let/Return", () => {
         map(throwUnexpectedCall),
       )
 
-      expect(await result()).toEqual(left("some error"))
+      expect(await result()).toEqual(either.left("some error"))
     })
 
     it("short circuits scoped computations when using function", async () => {
@@ -83,7 +83,7 @@ describe("Do/Let/Return", () => {
         map(throwUnexpectedCall),
       )
 
-      expect(await result()).toEqual(left("some error"))
+      expect(await result()).toEqual(either.left("some error"))
     })
 
     it("short circuits scoped computations with effects", async () => {
@@ -94,7 +94,7 @@ describe("Do/Let/Return", () => {
         map(throwUnexpectedCall),
       )
 
-      expect(await result()).toEqual(left("some error"))
+      expect(await result()).toEqual(either.left("some error"))
     })
 
     it("short circuits multiple scoped computations", async () => {
@@ -107,7 +107,7 @@ describe("Do/Let/Return", () => {
         map(throwUnexpectedCall),
       )
 
-      expect(await result()).toEqual(left("some error"))
+      expect(await result()).toEqual(either.left("some error"))
     })
   })
 })
