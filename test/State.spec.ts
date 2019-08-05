@@ -15,9 +15,9 @@ describe("Do/Let/Return", () => {
         of<number, number>(1),
         into("x"),
         exec(() => modify(inc)),
-        bind("y", () => get<number>()),
+        bind("y", () => get()),
         exec(() => put(42)),
-        bind("z", () => get<number>()),
+        bind("z", () => get()),
         map(({ x, y, z }) => x + y + z),
       )(1)
 

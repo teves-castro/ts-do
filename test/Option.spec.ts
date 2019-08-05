@@ -20,7 +20,7 @@ describe("Do/Let/Return", () => {
         some(23),
         into("x"),
         exec(() => some(undefined)),
-        bind("y", some(23)),
+        bind("y", () => some(23)),
         map(({ x, y }) => x - y),
       )
 
@@ -31,7 +31,7 @@ describe("Do/Let/Return", () => {
       const result = pipe(
         some(23),
         into("x"),
-        bind("y", some(23)),
+        bind("y", () => some(23)),
         map(({ x, y }) => x - y),
       )
 
@@ -42,11 +42,11 @@ describe("Do/Let/Return", () => {
       const result = pipe(
         some(23),
         into("x"),
-        bind("y", ({ x }) => some(x)),
+        bind("y", () => some(10)),
         map(({ x, y }) => x - y),
       )
 
-      expect(result).toEqual(some(0))
+      expect(result).toEqual(some(13))
     })
 
     it("chains multiple scoped computations", () => {
@@ -105,7 +105,7 @@ describe("Do/Let/Return", () => {
     it("short circuits none.let", () => {
       const result = pipe(
         none,
-        bind("x", some(10)),
+        bind("x", () => some(10)),
         map(throwUnexpectedCall),
       )
 

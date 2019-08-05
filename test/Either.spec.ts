@@ -96,7 +96,7 @@ describe("Do/Let/Return", () => {
     it("short circuits left.let", () => {
       const result = pipe(
         left("some error"),
-        bind("x", right(10)),
+        bind("x", () => right(10)),
         map(throwUnexpectedCall),
       )
 
