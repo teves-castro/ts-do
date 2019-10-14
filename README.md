@@ -17,7 +17,7 @@ yarn add ts-do
 Start by importing the extension:
 
 ```typescript
-import { some, map } from "fp-ts/lib/Option"
+import { some, map, option } from "fp-ts/lib/Option"
 import { pipe } from "fp-ts/lib/pipeable"
 import { range, sum } from "ramda"
 import * as Do from "ts-do"
