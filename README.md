@@ -2,7 +2,7 @@
 
 This library works as an extension for [fp-ts](https://github.com/gcanti/fp-ts) allowing the usage of a haskell like do notation. One can use exec, bind, sequence and into to chain computations on any of the supplied monads.
 Each bind or sequence in the computation chain contributes to a threaded context that is available to each subsequent step. The exec function can also be used to perform computations that add nothing to the context for their side-effects.
-It is possible to use this with any monads as long as its kind is defined in ft-ts.
+It is possible to use this with any monads as long as its kind is defined in fp-ts.
 
 # Installation
 
