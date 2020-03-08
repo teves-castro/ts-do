@@ -19,6 +19,7 @@ Start by importing the extension:
 ```typescript
 import { some, map, option } from "fp-ts/lib/Option"
 import { pipe } from "fp-ts/lib/pipeable"
+import { array } from "fp-ts/lib/Array"
 import { range, sum } from "ramda"
 import * as Do from "ts-do"
 
