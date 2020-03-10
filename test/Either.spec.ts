@@ -56,7 +56,7 @@ describe("Do/Let/Return", () => {
         sequence("ys", ({ x }) =>
           range(0, x).map(i => (i === 3 ? left("some error") : right(1))),
         ),
-        map(() => throwUnexpectedCall),
+        map(throwUnexpectedCall),
       )
 
       expect(result).toEqual(left("some error"))
@@ -84,11 +84,7 @@ describe("Do/Let/Return", () => {
     })
 
     it("short circuits left.into", () => {
-      const result = pipe(
-        left("some error"),
-        into("x"),
-        map(throwUnexpectedCall),
-      )
+      const result = pipe(left("some error"), into("x"), map(throwUnexpectedCall))
 
       expect(result).toEqual(left("some error"))
     })
